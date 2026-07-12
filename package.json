@@ -1,0 +1,23 @@
+{
+  "name": "@oghaai/flue-eval-reporter",
+  "version": "0.1.0",
+  "description": "Eval Studio reporter for Flue apps: production ingest notify + boot-time version stamping",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "peerDependencies": {
+    "@flue/runtime": ">=1.0.0-beta.9"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oghaAI/flue-eval-reporter.git"
+  }
+}
