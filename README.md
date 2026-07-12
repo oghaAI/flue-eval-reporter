@@ -10,11 +10,11 @@ No delivery guarantees by design: your Flue app's store is the system of record.
 ## Install
 
 ```sh
-bun add github:oghaAI/flue-eval-reporter#v0.1.0
-# or: npm install github:oghaAI/flue-eval-reporter#v0.1.0
+bun add github:oghaAI/flue-eval-reporter#v0.1.1
+# or: npm install github:oghaAI/flue-eval-reporter#v0.1.1
 ```
 
-`@flue/runtime >= 1.0.0-beta.9` is a peer dependency — your Flue app already has it. The repo is private: installs need GitHub access (a read-only deploy key or a `GH_TOKEN` with repo read, e.g. `https://x-access-token:$GH_TOKEN@github.com/…` in CI).
+`@flue/runtime >= 1.0.0-beta.9` is a peer dependency — your Flue app already has it. This dist repo is public (built output only — the 3 KB client-side reporter); the Eval Studio source stays private. Always pin a `#vX.Y.Z` tag.
 
 ## Usage
 

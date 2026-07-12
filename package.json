@@ -1,6 +1,6 @@
 {
   "name": "@oghaai/flue-eval-reporter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Eval Studio reporter for Flue apps: production ingest notify + boot-time version stamping",
   "type": "module",
   "exports": {
