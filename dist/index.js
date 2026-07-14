@@ -23,24 +23,36 @@ function initEvalStudioReporter(options = {}) {
   const post = (path, body, what) => fetch(`${url}${path}`, { method: "POST", headers, body: JSON.stringify(body) }).then(async (res) => {
     if (!res.ok) console.warn(`[eval-studio] ${what} rejected: ${res.status} ${await res.text()}`);
   }).catch((e) => console.warn(`[eval-studio] ${what} failed (run stays re-ingestable): ${e}`));
+  const notifyIngest = (agentName, instanceId, submissionId) => setTimeout(
+    () => void post(
+      "/api/ingest",
+      {
+        agentName,
+        instanceId,
+        ...submissionId ? { submissionId } : {},
+        ...project ? { project } : {},
+        ...selfUrl ? { flueBaseUrl: selfUrl } : {}
+      },
+      `ingest notify ${agentName}/${instanceId}`
+    ),
+    500
+  );
+  const agentNames = Object.keys(options.agents ?? {});
+  const soleAgentName = agentNames.length === 1 ? agentNames[0] : void 0;
   observe((event) => {
-    if (event.type !== "submission_settled" || event.outcome !== "completed") return;
-    const { agentName, instanceId, submissionId } = event;
-    if (!agentName || !instanceId) return;
-    setTimeout(
-      () => void post(
-        "/api/ingest",
-        {
-          agentName,
-          instanceId,
-          submissionId,
-          ...project ? { project } : {},
-          ...selfUrl ? { flueBaseUrl: selfUrl } : {}
-        },
-        `ingest notify ${agentName}/${instanceId}`
-      ),
-      500
-    );
+    if (event.type === "submission_settled") {
+      if (event.outcome !== "completed") return;
+      const { agentName, instanceId, submissionId } = event;
+      if (!agentName || !instanceId) return;
+      notifyIngest(agentName, instanceId, submissionId);
+      return;
+    }
+    if (event.type === "agent_end") {
+      const e = event;
+      const agentName = e.agentName ?? soleAgentName;
+      if (!agentName || !e.instanceId) return;
+      notifyIngest(agentName, e.instanceId, e.submissionId);
+    }
   });
   const agents = options.agents;
   if (!agents || Object.keys(agents).length === 0) return;
